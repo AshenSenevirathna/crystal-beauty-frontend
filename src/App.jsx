@@ -2,18 +2,22 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import "./App.css"
 import ProductCard from './components/productCard'
 import AdminPage from "./pages/adminPage"
-import HomePage from "./pages/HomePage"
+import HomePage from "./pages/homePage"
+import TestPage from "./pages/test"
+import LoginPage from "./pages/loginPage"
 
 function App() {
 
   return (
     <BrowserRouter>
-      <div className="w-full h-[100vh] bg-red-600">
+      <div className="w-full h-[100vh]">
 
         <Routes path="/">
         <Route path="/*" element={<HomePage/>}></Route>
         <Route path="/register" element={<h1>Register page</h1>}></Route>
+        <Route path="/login" element={<LoginPage/>}/>
         <Route path="/admin/*" element={<AdminPage/>}></Route>
+        <Route path="/test" element={<TestPage/>}></Route>
         </Routes>
 
       </div>
