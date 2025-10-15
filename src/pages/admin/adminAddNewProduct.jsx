@@ -34,6 +34,7 @@
 // }
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AddProductPage() {
     const [productId, setProductId] = useState("");
@@ -45,10 +46,24 @@ export default function AddProductPage() {
     const [labelledPrice, setLabelledPrice] = useState(0);
     const [category, setCategory] = useState("cream");
     const [stock, setStock] = useState(0);
+    const navigate = useNavigate();
+
+    async function addProduct(){
+        const token = localStorage.getItem("token");
+        if(token == null){
+            navigate("/login");
+            return;
+        }
+
+        for (let i = 0; i < images.length; i++) {
+            const element = array[i];
+            
+        }
+    }
 
     return (
         <div className="w-full h-screen flex justify-center items-center bg-[var(--color-primary)] mt-20 mb-20 py-10 ">
-            <div className="w-[700px] bg-white rounded-2xl shadow-2xl border border-[var(--color-accent)] p-8 flex flex-col gap-5">
+            <div className="w-[800px] bg-white rounded-2xl shadow-2xl  p-8 flex flex-col gap-5">
                 <h2 className="text-2xl font-semibold text-[var(--color-secondary)] text-center mb-4">
                     Add New Product
                 </h2>
@@ -111,7 +126,7 @@ export default function AddProductPage() {
                             type="file"
                             multiple
                             onChange={(e) => setImages(e.target.files)}
-                            className="border border-gray-300 rounded-lg px-3 py-2 cursor-pointer bg-[var(--color-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-all"
+                            className="border border-gray-300 rounded-lg px-3 py-2 cursor-pointer  focus:outline-none focus:border-[var(--color-accent)] transition-all"
                         />
                     </div>
 
@@ -171,8 +186,10 @@ export default function AddProductPage() {
                 </div>
 
                 <div className="flex justify-end items-center gap-2">
-                    <button className=" bg-red-300 h-[40px] w-[100px] rounded-full text-md font-medium flex justify-center items-center text-secondary  hover:border-red-500 hover:border-[2px]">Cancel</button>
-                    <button className="bg-yellow-200 h-[40px] w-[100px] rounded-full text-md font-medium text-secondary flex justify-center items-center hover:border-accent hover:border-[2px]">Submit</button>
+                    <button onClick={()=>{
+                        navigate("/admin/products")
+                    }} className=" bg-red-300 h-[40px] w-[100px] rounded-full text-md font-medium flex justify-center items-center text-secondary  hover:border-red-500 hover:border-[2px]">Cancel</button>
+                    <button onClick={addProduct} className="bg-yellow-200 h-[40px] w-[100px] rounded-full text-md font-medium text-secondary flex justify-center items-center hover:border-accent hover:border-[2px]">Submit</button>
                 </div>
 
             </div>

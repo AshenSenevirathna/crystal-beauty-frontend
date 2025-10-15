@@ -22,7 +22,7 @@ export default function mediaUpload(file) {
                         () => {
                             const publicUrl = supabase.storage
                                 .from("images")
-                                .getPublicUrl(file.name).data.publicUrl;
+                                .getPublicUrl(fileName).data.publicUrl;
                             resolve(publicUrl);
                         }).catch(
                             () => {
