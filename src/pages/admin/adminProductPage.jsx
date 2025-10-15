@@ -46,8 +46,8 @@ export default function AdminProductPage() {
                                 </td>
                                 <td>{item.productId}</td>
                                 <td>{item.name}</td>
-                                <td>{item.price}</td>
-                                <td>{item.labelledPrice}</td>
+                                <td>LKR. {item.price}</td>
+                                <td>LKR. {item.labelledPrice}</td>
                                 <td>{item.category}</td>
                                 <td>
                                     <div className="flex flex-row gap-[20px] justify-center items-center">
