@@ -35,6 +35,9 @@
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import mediaUpload from "../../utils/mediaUpload";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 export default function AddProductPage() {
     const [productId, setProductId] = useState("");
@@ -55,15 +58,43 @@ export default function AddProductPage() {
             return;
         }
 
+        const promises = []
         for (let i = 0; i < images.length; i++) {
-            const element = array[i];
-            
+            promises[i] = mediaUpload(images[i])  
+        }
+
+        try{
+            const urls = await Promise.all(promises);
+            const alternativeNames = altNames.split(",");
+
+            const product = {
+                productId : productId,
+                name : name,
+                altNames : alternativeNames,
+                description : description,
+                images : urls,
+                price : price,
+                labelledPrice : labelledPrice,
+                category : category,
+                stock : stock
+            }
+
+            await axios.post(import.meta.env.VITE_API_URL+"/api/products",product,{
+                headers:{
+                    Authorization : "Bearer "+token
+                }
+            });
+            toast.success("Product added successfully");
+            navigate("/admin/products");
+
+        }catch{
+            toast.error("An error occurred");
         }
     }
 
     return (
-        <div className="w-full h-screen flex justify-center items-center bg-[var(--color-primary)] mt-20 mb-20 py-10 ">
-            <div className="w-[800px] bg-white rounded-2xl shadow-2xl  p-8 flex flex-col gap-5">
+        <div className="w-full h-screen flex justify-center items-center bg-[var(--color-primary)] mt-20 mb-20 py-10">
+            <div className="w-[700px] bg-white rounded-2xl shadow-2xl  p-8 flex flex-col gap-5">
                 <h2 className="text-2xl font-semibold text-[var(--color-secondary)] text-center mb-4">
                     Add New Product
                 </h2>
@@ -189,7 +220,7 @@ export default function AddProductPage() {
                     <button onClick={()=>{
                         navigate("/admin/products")
                     }} className=" bg-red-300 h-[40px] w-[100px] rounded-full text-md font-medium flex justify-center items-center text-secondary  hover:border-red-500 hover:border-[2px]">Cancel</button>
-                    <button onClick={addProduct} className="bg-yellow-200 h-[40px] w-[100px] rounded-full text-md font-medium text-secondary flex justify-center items-center hover:border-accent hover:border-[2px]">Submit</button>
+                    <button onClick={addProduct} className="bg-orange-300 h-[40px] w-[100px] rounded-full text-md font-medium text-secondary flex justify-center items-center hover:border-accent hover:border-[2px]">Submit</button>
                 </div>
 
             </div>
