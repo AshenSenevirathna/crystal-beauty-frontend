@@ -2,12 +2,13 @@ import axios from "axios"
 import { useEffect, useState } from "react";
 import { BsTrash3 } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
 
 export default function AdminProductPage() {
 
-    const [products, setProducts] = useState([])
+    const [products, setProducts] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(import.meta.env.VITE_API_URL + "/api/products").then(
@@ -22,7 +23,7 @@ export default function AdminProductPage() {
         <div className="h-full w-full p-[10px]">
 
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] hover:text-accent text-5xl">
-                <CiCirclePlus/>
+                <CiCirclePlus />
             </Link>
 
             <table className="border border-gray-700 w-full text-center rounded-lg overflow-hidden">
@@ -52,7 +53,11 @@ export default function AdminProductPage() {
                                 <td>
                                     <div className="flex flex-row gap-[20px] justify-center items-center">
                                         <BsTrash3 className="hover:text-red-600" />
-                                        <FaRegEdit className="hover:text-accent" />
+                                        <FaRegEdit className="hover:text-accent" onClick={() => {
+                                            navigate("/admin/update-product", {
+                                                state: item
+                                            });
+                                        }} />
                                     </div>
                                 </td>
                             </tr>
