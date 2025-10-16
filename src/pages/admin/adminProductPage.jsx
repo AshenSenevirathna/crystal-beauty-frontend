@@ -34,6 +34,7 @@ export default function AdminProductPage() {
                         <th>Product Name</th>
                         <th>Product Price</th>
                         <th>Labelled Price</th>
+                        <th>Stock</th>
                         <th>Category</th>
                         <th>Actions</th>
                     </tr>
@@ -49,6 +50,7 @@ export default function AdminProductPage() {
                                 <td>{item.name}</td>
                                 <td>LKR. {item.price}</td>
                                 <td>LKR. {item.labelledPrice}</td>
+                                <td>{item.stock}</td>
                                 <td>{item.category}</td>
                                 <td>
                                     <div className="flex flex-row gap-[20px] justify-center items-center">

@@ -1,58 +1,64 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import mediaUpload from "../../utils/mediaUpload";
 import toast from "react-hot-toast";
 import axios from "axios";
 
 export default function UpdateProductPage() {
-    const [productId, setProductId] = useState("");
-    const [name, setName] = useState("");
-    const [altNames, setAltNames] = useState("");
-    const [description, setDescription] = useState("");
+    const location = useLocation();
+    const [productId, setProductId] = useState(location.state.productId);
+    const [name, setName] = useState(location.state.name);
+    const [altNames, setAltNames] = useState(location.state.altNames.join(","));
+    const [description, setDescription] = useState(location.state.description);
     const [images, setImages] = useState([]);
-    const [price, setPrice] = useState(0);
-    const [labelledPrice, setLabelledPrice] = useState(0);
-    const [category, setCategory] = useState("cream");
-    const [stock, setStock] = useState(0);
+    const [price, setPrice] = useState(location.state.price);
+    const [labelledPrice, setLabelledPrice] = useState(location.state.labelledPrice);
+    const [category, setCategory] = useState(location.state.category);
+    const [stock, setStock] = useState(location.state.stock);
     const navigate = useNavigate();
 
-    async function updateProduct(){
+    async function updateProduct() {
         const token = localStorage.getItem("token");
-        if(token == null){
+        if (token == null) {
             navigate("/login");
             return;
         }
 
         const promises = []
         for (let i = 0; i < images.length; i++) {
-            promises[i] = mediaUpload(images[i])  
+            promises[i] = mediaUpload(images[i])
         }
 
-        try{
-            const urls = await Promise.all(promises);
+        try {
+            let urls = await Promise.all(promises);
+
+            if(urls.length == 0){
+                urls = location.state.images;
+            }
+
             const alternativeNames = altNames.split(",");
 
             const product = {
-                productId : productId,
-                name : name,
-                altNames : alternativeNames,
-                description : description,
-                images : urls,
-                price : price,
-                labelledPrice : labelledPrice,
-                category : category,
-                stock : stock
+                productId: productId,
+                name: name,
+                altNames: alternativeNames,
+                description: description,
+                images: urls,
+                price: price,
+                labelledPrice: labelledPrice,
+                category: category,
+                stock: stock
             }
 
-            await axios.post(import.meta.env.VITE_API_URL+"/api/products",product,{
-                headers:{
-                    Authorization : "Bearer "+token
+            await axios.put(import.meta.env.VITE_API_URL + "/api/products/"+productId, product, {
+                headers: {
+                    Authorization: "Bearer " + token
                 }
             });
             toast.success("Product updated successfully");
             navigate("/admin/products");
 
-        }catch{
+        } catch {
             toast.error("An error occurred");
         }
     }
@@ -70,6 +76,7 @@ export default function UpdateProductPage() {
                             Product ID
                         </label>
                         <input
+                            disabled
                             value={productId}
                             onChange={(e) => setProductId(e.target.value)}
                             placeholder="Enter Product ID"
@@ -182,7 +189,7 @@ export default function UpdateProductPage() {
                 </div>
 
                 <div className="flex justify-end items-center gap-2">
-                    <button onClick={()=>{
+                    <button onClick={() => {
                         navigate("/admin/products")
                     }} className=" bg-red-300 h-[40px] w-[100px] rounded-full text-md font-medium flex justify-center items-center text-secondary  hover:border-red-500 hover:border-[2px]">Cancel</button>
                     <button onClick={updateProduct} className="bg-orange-300 h-[40px] w-[100px] rounded-full text-md font-medium text-secondary flex justify-center items-center hover:border-accent hover:border-[2px]">Submit</button>
