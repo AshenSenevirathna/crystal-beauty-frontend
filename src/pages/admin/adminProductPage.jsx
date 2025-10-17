@@ -5,9 +5,20 @@ import { FaRegEdit } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
 
+function ProductDeleteConfirm(props){
+    const productId = props.productId;
+
+    return(
+        <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
+            <div className="w-[500px] h-[200px] bg-white"></div>
+        </div>
+    )
+}
+
 export default function AdminProductPage() {
 
     const [products, setProducts] = useState([]);
+    const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,6 +32,7 @@ export default function AdminProductPage() {
     //console.log(products);
     return (
         <div className="h-full w-full p-[10px]">
+            <ProductDeleteConfirm/>
 
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] hover:text-accent text-5xl">
                 <CiCirclePlus />
@@ -54,7 +66,9 @@ export default function AdminProductPage() {
                                 <td>{item.category}</td>
                                 <td>
                                     <div className="flex flex-row gap-[20px] justify-center items-center">
-                                        <BsTrash3 className="hover:text-red-600" />
+                                        <BsTrash3 className="hover:text-red-600" onClick={() => {
+                                            axios.delete(import.meta.env.VITE_API_URL + "/api/products/" + item.productId);
+                                        }} />
                                         <FaRegEdit className="hover:text-accent" onClick={() => {
                                             navigate("/admin/update-product", {
                                                 state: item
