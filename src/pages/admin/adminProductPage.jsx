@@ -4,13 +4,41 @@ import { BsTrash3 } from "react-icons/bs";
 import { FaRegEdit } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { CiCirclePlus } from "react-icons/ci";
+import toast from "react-hot-toast";
+import { Loader } from "../../components/loader.jsx";
 
 function ProductDeleteConfirm(props){
     const productId = props.productId;
+    const close = props.close;
+    const refresh = props.refresh;
+    function deleteProduct(){
+        const token = localStorage.getItem("token")
+        axios
+        .delete(import.meta.env.VITE_API_URL + "/api/products/" + productId,{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then((response)=> {
+            console.log(response.data);
+            close();
+            toast.success("Product deleted successfully");
+            refresh();
+        }).catch(()=>{
+            toast.error("Failed to delete product");
+        });
+    }
 
     return(
         <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
-            <div className="w-[500px] h-[200px] bg-white"></div>
+            <div className="w-[500px] h-[200px] bg-primary relative flex flex-col justify-center items-center gap-[40px]">
+                <button onClick={close} className="absolute right-[-44px] top-[-44px] w-[40px] h-[40px] bg-red-600 rounded-full text-white flex justify-center items-center font-bold border border-red-600 hover:bg-white hover:text-red-600">X</button>
+                <p className="text-xl font-semibold">Are you sure you want to delete the product with product ID : {productId}?</p>
+                <div className="flex gap-[40px]">
+                    <button onClick={close} className="w-[100px] bg-blue-600 p-[5px] text-white hover:bg-accent">Cancel</button>
+                    <button onClick={deleteProduct} className="w-[100px] bg-red-600 p-[5px] text-white hover:bg-accent">Yes</button>
+                </div>
+            </div>
         </div>
     )
 }
@@ -19,26 +47,39 @@ export default function AdminProductPage() {
 
     const [products, setProducts] = useState([]);
     const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
+    const [productToDelete, setProductToDelete] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(import.meta.env.VITE_API_URL + "/api/products").then(
+        if(isLoading){
+            axios.get(import.meta.env.VITE_API_URL + "/api/products").then(
             (response) => {
                 console.log(response.data);
                 setProducts(response.data);
+                setIsLoading(false);
             });
-    }, []);
+        } 
+    }, [isLoading]);
 
     //console.log(products);
     return (
         <div className="h-full w-full p-[10px]">
-            <ProductDeleteConfirm/>
+
+            {
+                isDeleteConfirmVisible &&  <ProductDeleteConfirm refresh={()=>{setIsLoading(true)}} productId={productToDelete} close={()=>{setIsDeleteConfirmVisible(false)}}/> 
+            }
+            
+            <div className="bg-red-500">
+                <button>{products.length+" items"}</button>
+            </div>
 
             <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] hover:text-accent text-5xl">
                 <CiCirclePlus />
             </Link>
 
-            <table className="border border-gray-700 w-full text-center rounded-lg overflow-hidden">
+            {isLoading? <Loader/>:<table className="border border-gray-700 w-full text-center rounded-lg overflow-hidden">
                 <thead >
                     <tr className="bg-accent">
                         <th>Image</th>
@@ -67,7 +108,8 @@ export default function AdminProductPage() {
                                 <td>
                                     <div className="flex flex-row gap-[20px] justify-center items-center">
                                         <BsTrash3 className="hover:text-red-600" onClick={() => {
-                                            axios.delete(import.meta.env.VITE_API_URL + "/api/products/" + item.productId);
+                                            setProductToDelete(item.productId)
+                                            setIsDeleteConfirmVisible(true)
                                         }} />
                                         <FaRegEdit className="hover:text-accent" onClick={() => {
                                             navigate("/admin/update-product", {
@@ -83,7 +125,7 @@ export default function AdminProductPage() {
                         <td></td>
                     </tr>
                 </tbody>
-            </table>
+            </table>}
         </div>
 
 
@@ -163,3 +205,109 @@ export default function AdminProductPage() {
 //     </div>
 //   );
 // }
+
+
+// import axios from "axios"
+// import { useEffect, useState } from "react";
+// import { BsTrash3 } from "react-icons/bs";
+// import { FaRegEdit } from "react-icons/fa";
+// import { Link, useNavigate } from "react-router-dom";
+// import { CiCirclePlus } from "react-icons/ci";
+
+// function ProductDeleteConfirm(props){
+//     const productId = props.productId;
+
+//     return(
+//         <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
+//             <div className="w-[500px] h-[200px] bg-white"></div>
+//         </div>
+//     )
+// }
+
+// export default function AdminProductPage() {
+
+//     const [products, setProducts] = useState([]);
+//     const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
+//     const navigate = useNavigate();
+
+//     useEffect(() => {
+//         axios.get(import.meta.env.VITE_API_URL + "/api/products").then(
+//             (response) => {
+//                 console.log(response.data);
+//                 setProducts(response.data);
+//             });
+//     }, []);
+
+//     return (
+//         <div className="h-full w-full p-[10px]">
+            
+//             {/* Total product count display */}
+//             <div className="flex justify-between items-center mb-4">
+//                 <h2 className="text-2xl font-semibold">Products</h2>
+//                 <span className="text-gray-700 text-lg">
+//                     Total Products: <span className="font-bold text-accent">{products.length}</span>
+//                 </span>
+//             </div>
+
+//             <ProductDeleteConfirm/>
+
+//             <Link 
+//                 to="/admin/add-product" 
+//                 className="fixed right-[50px] bottom-[50px] hover:text-accent text-5xl"
+//             >
+//                 <CiCirclePlus />
+//             </Link>
+
+//             <table className="border border-gray-700 w-full text-center rounded-lg overflow-hidden">
+//                 <thead>
+//                     <tr className="bg-accent text-white">
+//                         <th>Image</th>
+//                         <th>Product Id</th>
+//                         <th>Product Name</th>
+//                         <th>Product Price</th>
+//                         <th>Labelled Price</th>
+//                         <th>Stock</th>
+//                         <th>Category</th>
+//                         <th>Actions</th>
+//                     </tr>
+//                 </thead>
+//                 <tbody>
+//                     {products.map((item) => {
+//                         return (
+//                             <tr key={item.productId}>
+//                                 <td>
+//                                     <img src={item.images[0]} className="w-16 h-16 object-cover mx-auto" />
+//                                 </td>
+//                                 <td>{item.productId}</td>
+//                                 <td>{item.name}</td>
+//                                 <td>LKR. {item.price}</td>
+//                                 <td>LKR. {item.labelledPrice}</td>
+//                                 <td>{item.stock}</td>
+//                                 <td>{item.category}</td>
+//                                 <td>
+//                                     <div className="flex flex-row gap-[20px] justify-center items-center">
+//                                         <BsTrash3 
+//                                             className="hover:text-red-600 cursor-pointer" 
+//                                             onClick={() => {
+//                                                 axios.delete(import.meta.env.VITE_API_URL + "/api/products/" + item.productId);
+//                                             }} 
+//                                         />
+//                                         <FaRegEdit 
+//                                             className="hover:text-accent cursor-pointer" 
+//                                             onClick={() => {
+//                                                 navigate("/admin/update-product", {
+//                                                     state: item
+//                                                 });
+//                                             }} 
+//                                         />
+//                                     </div>
+//                                 </td>
+//                             </tr>
+//                         )
+//                     })}
+//                 </tbody>
+//             </table>
+//         </div>
+//     )
+// }
+
