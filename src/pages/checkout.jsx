@@ -1,11 +1,22 @@
 import { BiTrash } from "react-icons/bi";
-import getTotal, {addToCart, loadCart} from "../utils/cart.js";
+
 import { CiCircleChevUp, CiCircleChevDown } from "react-icons/ci";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-export default function CartPage(){
-    const [cart, setCart] = useState(loadCart());
+export default function CheckoutPage(){
+    const location = useLocation();
+    const [cart, setCart] = useState(location.state);
+
+    function getTotal(){
+        let total = 0;
+        cart.forEach(
+            (item)=>{
+                total += item.price * item.quantity;
+            }
+        )
+        return total;
+    }
 
     return(
         <div className="w-full h-[calc(100vh-100px)] bg-primary flex flex-col pt-[25px] items-center">
@@ -16,8 +27,7 @@ export default function CartPage(){
                             <div key={index} className="w-full h-[120px] bg-white flex relative items-center">
                                 <button className="absolute text-red-500 right-[-40px] text-2xl rounded-full aspect-square hover:bg-red-500 hover:text-white p-[5px] font-bold" onClick={
                                     ()=>{
-                                        addToCart(item,-item.quantity);
-                                        setCart(loadCart());
+                                        
                                     }
                                 }><BiTrash/></button>
                                 <img className="h-full aspect-square object-cover" src={item.image}/>
@@ -29,15 +39,19 @@ export default function CartPage(){
                                 <div className="w-[100px] h-full flex flex-col justify-center items-center">
                                     <CiCircleChevUp className="text-3xl" onClick={
                                         ()=>{
-                                            addToCart(item,1);
-                                            setCart(loadCart());
+                                          const newCart = [...cart];
+                                          newCart[index].quantity += 1;
+                                          setCart(newCart);
                                         }
                                     }/>
                                     <span className="font-semibold text-3xl">{item.quantity}</span>
                                     <CiCircleChevDown className="text-3xl" onClick={
                                         ()=>{
-                                            addToCart(item,-1);
-                                            setCart(loadCart());
+                                            const newCart = [...cart];
+                                            if(newCart[index].quantity>1){
+                                                newCart[index].quantity -= 1;
+                                            }
+                                            setCart(newCart);
                                         }
                                     }/>
                                 </div>
@@ -53,7 +67,7 @@ export default function CartPage(){
                     })
                 }
                 <div className="w-full h-[100px] bg-white flex justify-end items-center relative">
-                    <Link state={cart} to="/checkout" className="absolute left-0 bg-accent text-white px-6 py-3 ml-[20px] hover:bg-accent/80">Proceed to Checkout</Link>
+                    <button to="/checkout" className="absolute left-0 bg-accent text-white px-6 py-3 ml-[20px] hover:bg-accent/80">Order</button>
                     <div className="h-[50px]">
                         <span className="font-semibold text-accent w-full text-right text-2xl pr-[10px] mt-[5px]">Total: LKR {getTotal().toFixed(2)}</span>
                     </div>
