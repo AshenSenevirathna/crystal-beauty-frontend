@@ -233,7 +233,7 @@ export default function LoginPage() {
             } else {
                 navigate("/")
             }
-            console.log(response.data);
+            //console.log(response.data);
         } catch (e) {
             console.error("Login failed:",e)
             toast.error("Login failed.Please check your credentials");
