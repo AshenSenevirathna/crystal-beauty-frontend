@@ -1,9 +1,14 @@
+import axios from "axios";
+import { useState } from "react";
+import toast from "react-hot-toast";
+
 export default function OrderDetailsModal({
   isModalOpen,
   closeModal,
   selectedOrder,
   refresh
 }) {
+  const [status, setStatus] = useState(selectedOrder?.status);
   if (!isModalOpen || !selectedOrder) return null;
 
   return (
@@ -72,22 +77,43 @@ export default function OrderDetailsModal({
         </div>
 
         {/* Footer Buttons */}
+        <div className="mt-4">
+          <label className="block text-secondary font-semibold mb-1">
+            Order Status
+          </label>
+          <select
+            defaultValue={selectedOrder.status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg bg-white text-secondary border border-secondary focus:outline-none focus:ring-2 focus:ring-accent cursor-pointer">
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="refunded">Refunded</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+
         <div className="flex justify-end gap-3 mt-6">
-          <button
-            onClick={() => {
-              refresh();
-              closeModal();
-            }}
-            className="bg-secondary text-white px-4 py-2 rounded"
-          >
-            Refresh
-          </button>
 
           <button
-            onClick={closeModal}
+            onClick={()=>{
+              const token = localStorage.getItem("token");
+              axios.put(
+                `${import.meta.env.VITE_API_URL}/api/orders/status/${selectedOrder.orderId}`,
+                {status : status},
+                {headers : {Authorization: `Bearer ${token}`}}
+              )
+              .then(()=>{
+                toast.success("Order status updated");
+                closeModal();
+                refresh();
+              });
+            }}
+            disabled={status== selectedOrder.status}
             className="bg-accent text-white px-4 py-2 rounded"
           >
-            Close
+            Update
           </button>
         </div>
 
