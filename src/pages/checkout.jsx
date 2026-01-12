@@ -113,7 +113,7 @@ export default function CheckoutPage() {
                         );
                     })
                 }
-                <div className="w-full border bg-white flex items-center relative lg:flex-col">
+                <div className="w-full bg-white flex items-center relative lg:flex-col">
                     <div className="w-full h-full flex justify-between items-center p-4">
                         <label htmlFor="name" className="text-sm text-secondary mr-[60px]">Name</label>
                         <input

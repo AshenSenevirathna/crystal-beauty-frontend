@@ -1,4 +1,4 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 //import HomePage from "./homePage";
 import { FaChartLine } from "react-icons/fa";
 import { MdShoppingCartCheckout } from "react-icons/md";
@@ -8,8 +8,41 @@ import AdminProductPage from "./admin/adminProductPage";
 import AddProductPage from "./admin/adminAddNewProduct";
 import UpdateProductPage from "./admin/adminUpdateProduct";
 import AdminOrdersPage from "./admin/adminOrders";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export default function AdminPage() {
+
+    const navigate = useNavigate();
+    const [userLoaded, setUserLoaded] = useState(false);
+
+    useEffect(
+        () => {
+            const token = localStorage.getItem("token");
+            if (token == null) {
+                toast.error("Please login to access admin panel");
+                navigate("/login");
+                return;
+            }
+            axios.get(import.meta.env.VITE_API_URL + "/api/users/me", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }).then((res)=>{
+                if (res.data.role !== "admin") {
+                    toast.error("You are not authorized to access admin panel");
+                    navigate("/");
+                    return;
+                }
+                setUserLoaded(true);
+            }).catch(()=>{
+                toast.error("Session expired. Please login again");
+                localStorage.removeItem("token");
+                navigate("/login");
+            });
+        },[]
+    );
+
     return (
         <div className="w-full h-full bg-primary flex text-secondary p-2">
             <div className="w-[300px] h-full bg-white flex flex-col items-center gap-[20px]">
@@ -40,9 +73,9 @@ export default function AdminPage() {
                     <Routes path="/">
                         <Route path="/" element={<h1>Dashboard</h1>}></Route>
                         <Route path="/products" element={<AdminProductPage />}></Route>
-                        <Route path="/orders" element={<AdminOrdersPage/>}></Route>
+                        <Route path="/orders" element={<AdminOrdersPage />}></Route>
                         <Route path="/add-product" element={<AddProductPage />}></Route>
-                        <Route path="/update-product" element={<UpdateProductPage/>}></Route>
+                        <Route path="/update-product" element={<UpdateProductPage />}></Route>
                     </Routes>
                 </div>
             </div>
