@@ -6,6 +6,7 @@ import HomePage from "./pages/homePage"
 import TestPage from "./pages/test"
 import LoginPage from "./pages/loginPage"
 import { Toaster } from "react-hot-toast"
+import RegisterPage from "./pages/registerPage"
 
 function App() {
 
@@ -17,7 +18,7 @@ function App() {
 
         <Routes path="/">
         <Route path="/*" element={<HomePage/>}></Route>
-        <Route path="/register" element={<h1>Register page</h1>}></Route>
+        <Route path="/register" element={<RegisterPage/>}></Route>
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/admin/*" element={<AdminPage/>}></Route>
         <Route path="/test" element={<TestPage/>}></Route>

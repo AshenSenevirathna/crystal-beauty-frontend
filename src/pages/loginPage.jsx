@@ -210,7 +210,7 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -308,9 +308,9 @@ export default function LoginPage() {
                 {/* Signup */}
                 <p className="text-sm text-center text-secondary/70">
                     Don’t have an account?{" "}
-                    <a href="/signup" className="text-accent hover:underline font-medium">
+                    <Link to="/register" className="text-accent hover:underline font-medium">
                         Sign Up
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>
