@@ -10,6 +10,8 @@ import UpdateProductPage from "./admin/adminUpdateProduct";
 import AdminOrdersPage from "./admin/adminOrders";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Loader } from "../components/loader";
+import axios from "axios";
 
 export default function AdminPage() {
 
@@ -70,13 +72,13 @@ export default function AdminPage() {
 
             <div className="w-[calc(100%-300px)] h-full border-[4px] border-accent rounded-[20px] overflow-hidden">
                 <div className="h-full w-full max-w-full max-h-full overflow-y-scroll">
-                    <Routes path="/">
+                    {userLoaded?<Routes path="/">
                         <Route path="/" element={<h1>Dashboard</h1>}></Route>
                         <Route path="/products" element={<AdminProductPage />}></Route>
                         <Route path="/orders" element={<AdminOrdersPage />}></Route>
                         <Route path="/add-product" element={<AddProductPage />}></Route>
                         <Route path="/update-product" element={<UpdateProductPage />}></Route>
-                    </Routes>
+                    </Routes>:<Loader/>}
                 </div>
             </div>
         </div>

@@ -3,6 +3,9 @@ import { BsCart3 } from "react-icons/bs";
 import { useState } from "react";
 import { MdMenu } from "react-icons/md";
 
+import UserData from "./userData";
+import UserDataMobile from "./userDataMobile";
+
 export default function Header() {
 
     const [isSideBarOpen, setIsSideBarOpen] = useState(false);
@@ -29,6 +32,9 @@ export default function Header() {
                             <a href="/about" className="p-4 border-b border-secondary/10">About</a>
                             <a href="/contact" className="p-4 border-b border-secondary/10">Contact</a>
                             <a href="/cart" className="p-4 border-b border-secondary/10">Cart</a>
+                            <div className="lg:hidden flex w-[200px] absolute bottom-[260px] text-3xl justify-center items-center">
+                                <UserDataMobile />
+                            </div>
                         </div>
                     </div>
                 }
@@ -37,6 +43,9 @@ export default function Header() {
                     <Link to="/products">Products</Link>
                     <Link to="/about">About</Link>
                     <Link to="/contact">Contact</Link>
+                </div>
+                <div className="h-full hidden lg:flex w-[200px] absolute right-[100px] top-0 text-3xl justify-center items-center">
+                    <UserData />
                 </div>
                 <Link to="/cart" className="h-full absolute text-3xl right-0 hidden lg:flex justify-center items-center">
                     <BsCart3 />
