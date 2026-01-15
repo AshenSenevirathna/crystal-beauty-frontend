@@ -7,24 +7,27 @@ import TestPage from "./pages/test"
 import LoginPage from "./pages/loginPage"
 import { Toaster } from "react-hot-toast"
 import RegisterPage from "./pages/registerPage"
+import { GoogleOAuthProvider } from "@react-oauth/google"
 
 function App() {
 
   return (
     <BrowserRouter>
-      <div className="w-full h-[100vh]">
+       <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}> 
+        <div className="w-full h-[100vh]">
 
-        <Toaster position="top-right"/>
+          <Toaster position="top-right" />
 
-        <Routes path="/">
-        <Route path="/*" element={<HomePage/>}></Route>
-        <Route path="/register" element={<RegisterPage/>}></Route>
-        <Route path="/login" element={<LoginPage/>}/>
-        <Route path="/admin/*" element={<AdminPage/>}></Route>
-        <Route path="/test" element={<TestPage/>}></Route>
-        </Routes>
+          <Routes path="/">
+            <Route path="/*" element={<HomePage />}></Route>
+            <Route path="/register" element={<RegisterPage />}></Route>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/admin/*" element={<AdminPage />}></Route>
+            <Route path="/test" element={<TestPage />}></Route>
+          </Routes>
 
-      </div>
+        </div>
+      </GoogleOAuthProvider>
     </BrowserRouter>
   )
 }

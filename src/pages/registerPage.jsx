@@ -13,21 +13,22 @@ export default function RegisterPage() {
     const navigate = useNavigate();
 
     async function register() {
+        if (password !== confirmPassword) {
+            toast.error("Password do not match");
+            return;
+        }
         try {
             const response = await axios.post(
-                import.meta.env.VITE_API_URL + "/api/users/login", {
-                email,
-                password
+                import.meta.env.VITE_API_URL + "/api/users/", {
+                email: email,
+                password: password,
+                firstName: firstName,
+                lastName: lastName
             });
-            localStorage.setItem("token",response.data.token);
-            const user = response.data.user;
-            toast.success("Login Successful");
-            if (user.role == "admin") {
-                navigate("/admin");
-            } else {
-                navigate("/")
-            }
-            //console.log(response.data);
+
+            toast.success("Registration successful! Please login.");
+            navigate("/login");
+
         } catch (e) {
             console.error("Login failed:",e)
             toast.error("Login failed.Please check your credentials");

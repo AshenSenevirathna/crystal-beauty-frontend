@@ -207,6 +207,7 @@
 
 
 
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -217,6 +218,24 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     //const [remember, setRemember] = useState(false);
     const navigate = useNavigate();
+    const googleLogin = useGoogleLogin({
+        onSuccess: (response) => {
+            axios.post(import.meta.env.VITE_API_URL + "/api/users/google-login",{
+                token : response.access_token
+            }).then((res)=>{
+                localStorage.setItem("token",res.data.token);
+                const user = res.data.user;
+                if (user.role == "admin") {
+                    navigate("/admin");
+                }else{
+                    navigate("/");
+                }
+            }).catch((err)=>{
+                console.error("Google login failed:",err);
+                toast.error("Google login failed. Please try again.");
+            });
+        }
+    });
 
     async function login() {
         try {
@@ -225,7 +244,7 @@ export default function LoginPage() {
                 email,
                 password
             });
-            localStorage.setItem("token",response.data.token);
+            localStorage.setItem("token", response.data.token);
             const user = response.data.user;
             toast.success("Login Successful");
             if (user.role == "admin") {
@@ -235,7 +254,7 @@ export default function LoginPage() {
             }
             //console.log(response.data);
         } catch (e) {
-            console.error("Login failed:",e)
+            console.error("Login failed:", e)
             toast.error("Login failed.Please check your credentials");
         }
     }
@@ -296,6 +315,12 @@ export default function LoginPage() {
                     className="w-full h-12 bg-accent text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:bg-[#e6731f] transition-all"
                 >
                     Login
+                </button>
+                <button
+                    onClick={googleLogin}
+                    className="w-full h-12 bg-accent text-white font-semibold rounded-xl shadow-md hover:shadow-lg hover:bg-[#e6731f] transition-all"
+                >
+                    Google Login
                 </button>
 
                 {/* Divider */}
