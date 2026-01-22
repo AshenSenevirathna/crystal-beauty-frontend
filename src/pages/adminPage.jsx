@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Loader } from "../components/loader";
 import axios from "axios";
+import AdminUsersPage from "./admin/usersPage";
 
 export default function AdminPage() {
 
@@ -78,6 +79,7 @@ export default function AdminPage() {
                         <Route path="/orders" element={<AdminOrdersPage />}></Route>
                         <Route path="/add-product" element={<AddProductPage />}></Route>
                         <Route path="/update-product" element={<UpdateProductPage />}></Route>
+                        <Route path="/users" element={<AdminUsersPage/>}></Route>
                     </Routes>:<Loader/>}
                 </div>
             </div>
