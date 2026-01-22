@@ -15,27 +15,29 @@ function UserBlockConfirm(props) {
     const refresh = props.refresh;
     function blockUser() {
         const token = localStorage.getItem("token")
-        // axios
-        // .delete(import.meta.env.VITE_API_URL + "/api/products/" + productId,{
-        //     headers: {
-        //         Authorization: `Bearer ${token}`
-        //     }
-        // })
-        // .then((response)=> {
-        //     console.log(response.data);
-        //     close();
-        //     toast.success("Product deleted successfully");
-        //     refresh();
-        // }).catch(()=>{
-        //     toast.error("Failed to delete product");
-        // });
+        axios
+        .put(import.meta.env.VITE_API_URL + "/api/users/block/" + email,{
+            isBlock: !props.user.isBlock
+        },{
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+        .then((response)=> {
+            console.log(response.data);
+            close();
+            toast.success("User block status changed successfully");
+            refresh();
+        }).catch(()=>{
+            toast.error("Failed to change user block status");
+        });
     }
 
     return (
         <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex justify-center items-center">
             <div className="w-[500px] h-[200px] bg-primary relative flex flex-col justify-center items-center gap-[40px]">
                 <button onClick={close} className="absolute right-[-44px] top-[-44px] w-[40px] h-[40px] bg-red-600 rounded-full text-white flex justify-center items-center font-bold border border-red-600 hover:bg-white hover:text-red-600">X</button>
-                <p className="text-xl font-semibold text-center">Are you sure you want to block the user with email : {email}?</p>
+                <p className="text-xl font-semibold text-center">Are you sure you want to {props.user.isBlock?"unblock":"block"} the user with email : {email}?</p>
                 <div className="flex gap-[40px]">
                     <button onClick={close} className="w-[100px] bg-blue-600 p-[5px] text-white hover:bg-accent">Cancel</button>
                     <button onClick={blockUser} className="w-[100px] bg-red-600 p-[5px] text-white hover:bg-accent">Yes</button>
@@ -81,7 +83,7 @@ export default function AdminUsersPage() {
         <div className="h-full w-full p-[10px]">
 
             {
-                isBlockConfirmVisible && <UserBlockConfirm refresh={() => { setIsLoading(true) }} email={userToBlock.email} close={() => { setIsDeleteConfirmVisible(false) }} />
+                isBlockConfirmVisible && <UserBlockConfirm refresh={() => { setIsLoading(true) }} user={userToBlock} close={() => {setIsBlockConfirmVisible(false) }} />
             }
 
             <div className="bg-red-500">
