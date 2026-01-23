@@ -1,21 +1,14 @@
-import { Route, Routes } from "react-router-dom";
-import Header from "../components/header";
-import { ProductPage } from "./productPage";
-import ProductOverview from "./productOverview";
-import CartPage from "./cart";
-import CheckoutPage from "./checkout";
 import HomeImageSlider from "../components/homeImageSlider";
 import { LiaCertificateSolid } from "react-icons/lia";
 import { TbTruckDelivery } from "react-icons/tb";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
-import WelcomePage from "./welcomePage";
 
-export default function HomePage() {
-    return (
-        <div className="w-full h-full">
-            <Header />
-            {/* <HomeImageSlider /> */}
+export default function WelcomePage(){
+    return(
+         <div className="w-full h-full">
+            
+            <HomeImageSlider />
 
             {/* <div className="w-full h-[300px] flex flex-row">
                 <div className="w-full h-full flex flex-col items-center justify-center p-8 text-secondary">
@@ -40,11 +33,11 @@ export default function HomePage() {
                 </div>
             </div> */}
 
-            
-            {/* <section className="bg-primary py-16 px-4">
+            {/**/}
+            <section className="bg-primary py-16 px-4">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-                    
+                    {/* Card 1 */}
                     <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <LiaCertificateSolid className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
@@ -55,7 +48,7 @@ export default function HomePage() {
                         </p>
                     </div>
 
-                    
+                    {/* Card 2 */}
                     <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <TbTruckDelivery className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
@@ -66,7 +59,7 @@ export default function HomePage() {
                         </p>
                     </div>
 
-                    
+                    {/* Card 3 */}
                     <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <RiSecurePaymentFill className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
@@ -77,7 +70,7 @@ export default function HomePage() {
                         </p>
                     </div>
 
-                   
+                    {/* Card 4 */}
                     <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <VscWorkspaceTrusted className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
@@ -89,19 +82,10 @@ export default function HomePage() {
                     </div>
 
                 </div>
-            </section> */}
+            </section>
 
 
-            <Routes path="/">
-                <Route path="/" element={<WelcomePage/>}></Route>
-                <Route path="/products" element={<ProductPage />}></Route>
-                <Route path="/contact" element={<h1>Contact Us</h1>}></Route>
-                <Route path="/about" element={<h1>About Us</h1>}></Route>
-                <Route path="/overview/:id" element={<ProductOverview />} />
-                <Route path="/cart" element={<CartPage />} />
-                <Route path="/checkout" element={<CheckoutPage />} />
-                <Route path="/*" element={<h1>404 Not Found</h1>}></Route>
-            </Routes>
+            
         </div>
-    )
+    );
 }
