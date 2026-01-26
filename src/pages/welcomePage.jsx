@@ -3,6 +3,7 @@ import { LiaCertificateSolid } from "react-icons/lia";
 import { TbTruckDelivery } from "react-icons/tb";
 import { RiSecurePaymentFill } from "react-icons/ri";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
+import Footer from "../components/footer";
 
 export default function WelcomePage(){
     return(
@@ -38,7 +39,7 @@ export default function WelcomePage(){
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
                     {/* Card 1 */}
-                    <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
+                    <div className="group flex flex-col items-center p-8 transition-all duration-300 bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <LiaCertificateSolid className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
                         </div>
@@ -49,7 +50,7 @@ export default function WelcomePage(){
                     </div>
 
                     {/* Card 2 */}
-                    <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
+                    <div className="group flex flex-col items-center p-8 transition-all duration-300 bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <TbTruckDelivery className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
                         </div>
@@ -60,7 +61,7 @@ export default function WelcomePage(){
                     </div>
 
                     {/* Card 3 */}
-                    <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
+                    <div className="group flex flex-col items-center p-8 transition-all duration-300 bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <RiSecurePaymentFill className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
                         </div>
@@ -71,7 +72,7 @@ export default function WelcomePage(){
                     </div>
 
                     {/* Card 4 */}
-                    <div className="group flex flex-col items-center p-8 transition-all duration-300 hover:bg-white hover:shadow-xl rounded-2xl">
+                    <div className="group flex flex-col items-center p-8 transition-all duration-300 bg-white hover:shadow-xl rounded-2xl">
                         <div className="mb-6 p-4 rounded-full bg-white group-hover:bg-accent/10 transition-colors">
                             <VscWorkspaceTrusted className="text-6xl text-accent transition-transform duration-300 group-hover:scale-110" />
                         </div>
@@ -83,6 +84,7 @@ export default function WelcomePage(){
 
                 </div>
             </section>
+            <Footer/>
 
 
             
