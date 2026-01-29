@@ -11,6 +11,9 @@ import { RiSecurePaymentFill } from "react-icons/ri";
 import { VscWorkspaceTrusted } from "react-icons/vsc";
 import WelcomePage from "./welcomePage";
 import Footer from "../components/footer";
+import AboutPage from "./about";
+import Contact from "./contact";
+import ContactPage from "./contact";
 
 export default function HomePage() {
     return (
@@ -20,8 +23,8 @@ export default function HomePage() {
             <Routes path="/">
                 <Route path="/" element={<WelcomePage/>}></Route>
                 <Route path="/products" element={<ProductPage />}></Route>
-                <Route path="/contact" element={<h1>Contact Us</h1>}></Route>
-                <Route path="/about" element={<h1>About Us</h1>}></Route>
+                <Route path="/contact" element={<ContactPage/>}></Route>
+                <Route path="/about" element={<AboutPage/>}></Route>
                 <Route path="/overview/:id" element={<ProductOverview />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
